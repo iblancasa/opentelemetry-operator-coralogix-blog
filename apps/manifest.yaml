@@ -1,0 +1,149 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1
+  labels:
+    app: app1
+    service: app1
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: app1
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: demo-app1
+  labels:
+    account: app1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-v1
+  labels:
+    app: app1
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app1
+      version: v1
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
+      labels:
+        app: app1
+        version: v1
+    spec:
+      serviceAccountName: demo-app1
+      containers:
+      - name: app1
+        image: ${APP_IMG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app2
+  labels:
+    app: app2
+    service: app2
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: app2
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: demo-app2
+  labels:
+    account: app2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2-v1
+  labels:
+    app: app2
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2
+      version: v1
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
+      labels:
+        app: app2
+        version: v1
+    spec:
+      serviceAccountName: demo-app2
+      containers:
+      - name: app2
+        image: ${APP2_IMG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app3
+  labels:
+    app: app3
+    service: app3
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: app3
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: demo-app3
+  labels:
+    account: app3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app3-v1
+  labels:
+    app: app3
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app3
+      version: v1
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
+      labels:
+        app: app3
+        version: v1
+    spec:
+      serviceAccountName: demo-app3
+      containers:
+      - name: app3
+        image: ${APP3_IMG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
